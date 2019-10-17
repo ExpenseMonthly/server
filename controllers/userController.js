@@ -15,13 +15,19 @@ class UserController {
 
     static login(req, res, next) {
         const { email, password } = req.body;
+        let errors = [];
         if (email === undefined || email === '') {
-            return next({ statusCode: 400, msg: 'email is required' })
+            errors.push('email is required');
         }
 
         if (password === undefined || password === '') {
-            return next({ statusCode: 400, msg: 'password is required' })
+            errors.push('password is required');
         }
+
+        if (errors.length > 0) {
+            return next({ statusCode: 400, msg: errors });
+        }
+
         User.findOne({ email })
             .then(user => {
                 if (!user) {
