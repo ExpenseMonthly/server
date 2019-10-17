@@ -21,11 +21,21 @@ describe('Authentication', function () {
         it('Register without error', function (done) {
             chai.request(app)
                 .post('/users/register')
-                .send({ name: 'candra saputra', email: 'candrasaputra@live.com', password: 'password123' })
+                .send(
+                    {
+                        name: 'candra saputra',
+                        email: 'candrasaputra@live.com',
+                        password: 'password123',
+                        gender: 'male',
+                        profile_url: 'tes.jpg',
+                        point: 0
+                    })
                 .end(function (err, res) {
                     expect(res.body).to.have.property('name');
                     expect(res.body).to.have.property('email');
                     expect(res.body.name).to.equal('candra saputra');
+                    expect(res.body.gender).to.equal('male');                    
+                    expect(res.body.point).to.equal(0);
                     expect(res).to.have.status(201);
                     done();
                 })
@@ -34,7 +44,15 @@ describe('Authentication', function () {
         it('Error email has beem used', function (done) {
             chai.request(app)
                 .post('/users/register')
-                .send({ name: 'candra saputra', email: 'candrasaputra@live.com', password: 'password123' })
+                .send(
+                    {
+                        name: 'candra saputra',
+                        email: 'candrasaputra@live.com',
+                        password: 'password123',
+                        gender: 'male',
+                        profile_url: 'tes.jpg',
+                        point: 0
+                    })
                 .end(function (err, res) {
                     expect(res.body.message).to.have.members(['Email has been used']);
                     expect(res).to.have.status(400);
@@ -45,7 +63,16 @@ describe('Authentication', function () {
         it('Error email and password format', function (done) {
             chai.request(app)
                 .post('/users/register')
-                .send({ name: 'candra saputra', email: 'candrasaputra', password: 'password' })
+                .send(
+                    {
+                        name: 'candra saputra',
+                        email: 'candrasaputra',
+                        password: 'password',
+                        gender: 'male',
+                        profile_url: 'tes.jpg',
+                        point: 0
+                    }
+                )
                 .end(function (err, res) {
                     expect(res.body.message).to.have.members(['Invalid Email', 'Password must contain at least one letter, one number, and minimum six characters']);
                     expect(res).to.have.status(400);

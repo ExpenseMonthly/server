@@ -47,6 +47,19 @@ const userSchema = new Schema({
             message: 'Password must contain at least one letter, one number, and minimum six characters'
         },
         required: [true, 'Password is required']
+    },
+    gender: {
+        type: String,
+        required: [true, 'Gender is required']
+    },
+    profile_url: {
+        type: String,
+        required: [true, 'Profile_url is required']
+    },
+    point: {
+        type: Number,
+        required: [true, 'Point is required'],
+        default: 0
     }
 }, {
     timestamps: true
