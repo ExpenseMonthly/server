@@ -4,9 +4,9 @@ const { bcrypt } = require('../helpers');
 
 class UserController {
     static register(req, res, next) {
-        const { name, email, password } = req.body
+        const { name, email, password, gender, profile_url, point } = req.body
 
-        User.create({ name, email, password })
+        User.create({ name, email, password, gender, profile_url, point })
             .then(result => {
                 res.status(201).json(result)
             })
@@ -36,9 +36,12 @@ class UserController {
 
                     if (bcrypt.compare(password, user.password)) {
                         let userData = {
-                            'name': user.name,
                             '_id': user._id,
-                            'email': user.email
+                            'name': user.name,
+                            'email': user.email,
+                            'gender': user.gender,
+                            'profile_url': user.profile_url,
+                            'point': user.point
                         }
 
                         let token = jwt.generateToken(userData);
