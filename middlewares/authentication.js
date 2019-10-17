@@ -5,9 +5,8 @@ function authentication(req, res, next) {
     try {
         const token = req.headers.token
         const decode = jwt.decodeToken(token)
-
         req.decode = decode
-        let _id = req.decode.id
+        let _id = req.decode._id
 
         User.findById(_id)
             .then(user => {
