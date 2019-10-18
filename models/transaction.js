@@ -32,7 +32,7 @@ const transactionSchema = new Schema({
     },
     image_url: {
         type: String,
-        required: [true, 'image_url is required']
+        // required: [true, 'image_url is required']
     },
     userid: {
         type: String,
