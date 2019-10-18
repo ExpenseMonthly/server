@@ -53,8 +53,7 @@ const userSchema = new Schema({
         required: [true, 'Gender is required']
     },
     profile_url: {
-        type: String,
-        required: [true, 'Profile_url is required']
+        type: String
     },
     point: {
         type: Number,
