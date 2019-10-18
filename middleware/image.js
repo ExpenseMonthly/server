@@ -50,9 +50,7 @@ const sendUploadToGCS = (req, res, next) => {
 const Multer = require('multer'),
     multer = Multer({
         fileFilter: function (req, file, next) {
-            console.log(file.mimetype);
             if (file.mimetype == 'image/jpeg') {
-                console.log(`SUKSESSSS`);
                 next(null, true);
             } else {
                 next({ status: 400, message: "Invalid Image Type" });
