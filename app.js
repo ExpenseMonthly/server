@@ -14,7 +14,9 @@ const express = require('express'),
 
 let testing = (process.env.NODE_ENV === 'test') ? '-test' : '';
 mongoose.connect(MONGO_CONNECTION + testing, { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false }, function (err) {
-    if (err) console.log('Database connection failed')
+    if (err) {
+        console.log('Database connection failed'); console.log(err);
+    }
     else console.log(`Database connected to : ${MONGO_CONNECTION}`)
 });
 
