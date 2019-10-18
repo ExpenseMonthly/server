@@ -4,7 +4,6 @@ const Schema = mongoose.Schema;
 const transactionSchema = new Schema({
     receipt_id: {
         type: String,
-        required: [true, 'receipt_id is required'],
         validate: [{
             validator: function recieptUnique(receipt_id) {
                 return Transaction.findOne({ receipt_id: this.receipt_id })

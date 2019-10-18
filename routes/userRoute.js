@@ -1,6 +1,6 @@
 const express = require('express');
 const UserController = require('../controllers/userController');
-const { multer, getPublicUrl, sendUploadToGCS } = require('../middlewares/image');
+const { multer, getPublicUrl, sendUploadToGCS } = require('../middleware/image');
 
 const router = express.Router();
 

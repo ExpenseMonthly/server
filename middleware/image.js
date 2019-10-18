@@ -38,19 +38,26 @@ const sendUploadToGCS = (req, res, next) => {
     stream.end(req.file.buffer)
 }
 const Multer = require('multer'),
-multer = Multer({
-    fileFilter: function (req, file, next) {
-        if ((path.extname(file.originalname) === '.jpg')) {
-            next(null, true);
-        } else {
-            next({ status: 400, message: "Invalid Image Type" });
+    multer = Multer({
+        fileFilter: function (req, file, next) {
+            console.log(file.mimetype);
+            if (file.mimetype == 'image/jpeg') {
+                console.log(`SUKSESSSS`);
+                next(null, true);
+            } else {
+                next({ status: 400, message: "Invalid Image Type" });
+            }
+            // if ((path.extname(file.originalname) === '.jpg')) {
+            //     next(null, true);
+            // } else {
+            //     next({ status: 400, message: "Invalid Image Type" });
+            // }
+        },
+        storage: Multer.MemoryStorage,
+        limits: {
+            fileSize: 1024 * 1024 * 10
         }
-    },
-    storage: Multer.MemoryStorage,
-    limits: { 
-        fileSize: 1024 * 1024
-    }
-})
+    })
 
 module.exports = {
     getPublicUrl,
