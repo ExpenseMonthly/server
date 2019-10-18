@@ -16,14 +16,13 @@ class TransactionController {
     static store(req, res, next) {
         const { receipt_id, date, items, userid } = req.body;
         let data = { receipt_id, date, items, userid, };
-        if (req.file) {
+        if (req.file)
             data.image_url = req.file.cloudStoragePublicUrl;
-        }
-        Transaction.create(
-            data
-        ).then(transaction => {
-            res.status(201).json(transaction)
-        }).catch(next);
+
+        Transaction.create(data)
+            .then(transaction => {
+                res.status(201).json(transaction)
+            }).catch(next);
     }
 
     static findOne(req, res, next) {
