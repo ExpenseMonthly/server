@@ -4,9 +4,14 @@ const { bcrypt } = require('../helpers');
 
 class UserController {
     static register(req, res, next) {
-        const { name, email, password, gender, profile_url, point } = req.body
+        const { name, email, password, gender, point } = req.body
+        const data = { name, email, password, gender, point };
 
-        User.create({ name, email, password, gender, profile_url, point })
+        if (req.file) {
+            data.profile_url = req.file.cloudStoragePublicUrl;
+        }
+
+        User.create(data)
             .then(result => {
                 res.status(201).json(result)
             })
