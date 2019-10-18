@@ -1,7 +1,7 @@
 const express = require('express');
 const TransactionController = require('../controllers/transactionController');
-const { multer, sendUploadToGCS, getPublicUrl } = require('../middlewares/image');
-const authentication = require('../middlewares/authentication');
+const { multer, sendUploadToGCS, getPublicUrl } = require('../middleware/image');
+const authentication = require('../middleware/authentication');
 const router = express.Router();
 
 router.use(authentication);
