@@ -8,7 +8,7 @@ const express = require('express'),
     axios = require('axios'),
     routes = require('./routes'),
     PORT = process.env.PORT || 3000,
-    errorHandler = require('./middlewares/errorHandler'),
+    errorHandler = require('./middleware/errorHandler'),
     MONGO_CONNECTION = process.env.MONGO_CONNECTION,
     app = express()
 
