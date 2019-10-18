@@ -1,12 +1,14 @@
 const express = require('express');
 const TransactionController = require('../controllers/transactionController');
 const { multer, sendUploadToGCS, getPublicUrl } = require('../middleware/image');
+const processText = require('../middleware/ocr')
 const authentication = require('../middleware/authentication');
 const router = express.Router();
 
 router.use(authentication);
 router.get('/', TransactionController.findAll);
-router.post('/', multer.single('file'), sendUploadToGCS, TransactionController.store);
+router.post('/', multer.single('file'), sendUploadToGCS, processText, TransactionController.store);
+
 
 router.get('/:id', TransactionController.findOne);
 router.patch('/:id', multer.single('file'), sendUploadToGCS, TransactionController.update);
