@@ -1,21 +1,18 @@
-const mongoose = require('mongoose');
-const fs = require('fs');
-
 const chai = require('chai');
 const chaiHttp = require('chai-http');
 const app = require('../app');
-const User = require("../models/user");
+const clearDatabase = require("../helpers/test/clearDatabase");
 
 chai.use(chaiHttp);
 let expect = chai.expect;
 
+before(function (done) {
+    this.timeout(10000)
+    console.log("before in user test")
+    clearDatabase(done);
+});
+
 describe('Authentication', function () {
-    before(function (done) {
-        mongoose.connection.db.dropDatabase(function (err) {
-            console.log('db dropped');
-            done();
-        });
-    });
 
     describe('register', function () {
         it('Register without error', function (done) {
@@ -34,7 +31,7 @@ describe('Authentication', function () {
                     expect(res.body).to.have.property('name');
                     expect(res.body).to.have.property('email');
                     expect(res.body.name).to.equal('candra saputra');
-                    expect(res.body.gender).to.equal('male');                    
+                    expect(res.body.gender).to.equal('male');
                     expect(res.body.point).to.equal(0);
                     expect(res).to.have.status(201);
                     done();
