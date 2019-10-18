@@ -23,18 +23,18 @@ const sendUploadToGCS = (req, res, next) => {
     } else {
         const gcsname = Date.now() + req.file.originalname
         const file = bucket.file(gcsname)
-        
+
         const stream = file.createWriteStream({
             metadata: {
                 contentType: req.file.mimetype
             }
         })
-        
+
         stream.on('error', (err) => {
             req.file.cloudStorageError = err
             next(err)
         })
-        
+
         stream.on('finish', () => {
             req.file.cloudStorageObject = gcsname
             file.makePublic().then(() => {
@@ -43,14 +43,14 @@ const sendUploadToGCS = (req, res, next) => {
                 next()
             })
         })
-        
+
         stream.end(req.file.buffer)
     }
 }
 const Multer = require('multer'),
     multer = Multer({
         fileFilter: function (req, file, next) {
-            if (file.mimetype == 'image/jpeg') {
+            if ((path.extname(file.originalname) === '.jpg' || path.extname(file.originalname) === '.jpeg')) {
                 next(null, true);
             } else {
                 next({ status: 400, message: "Invalid Image Type" });
