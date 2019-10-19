@@ -1,5 +1,8 @@
 const Transaction = require('../models/transaction');
+<<<<<<< HEAD
 const User = require('../models/user');
+=======
+>>>>>>> 27739741aceb4fe4d2c67c6a522bd8711760e84b
 const deleteFile = require('../helpers/deleteFileGcs');
 
 class TransactionController {
@@ -16,12 +19,20 @@ class TransactionController {
     }
 
     static store(req, res, next) {
+<<<<<<< HEAD
         let newBill = {};
         const userid = req.decode;
         const { receipt_id, date, items } = req.body;
         let data = { receipt_id, date, items, userid };
         if (req.file)
             data.image_url = req.file.cloudStoragePublicUrl;
+=======
+        const { receipt_id, date, items, userid } = req.body;
+        let data = { receipt_id, date, items, userid, };
+        if (req.file) {
+            data.image_url = req.file.cloudStoragePublicUrl;
+        }
+>>>>>>> 27739741aceb4fe4d2c67c6a522bd8711760e84b
         Transaction.create(
             data
         ).then(transaction => {
@@ -92,6 +103,7 @@ class TransactionController {
         Transaction.findByIdAndDelete(req.params.id)
             .then(data => {
                 if (data) {
+<<<<<<< HEAD
                     receipt = data;
                     let file = data.image_url.split('/');
                     let fileName = file[file.length - 1];
@@ -116,6 +128,15 @@ class TransactionController {
             })
             .then(user => {
                 res.status(200).json({ message: 'successfully deleted', receipt });
+=======
+                    let file = data.image_url.split('/');
+                    let fileName = file[file.length - 1];
+                    deleteFile(fileName);
+                    res.status(200).json({ message: 'successfully deleted', data });
+                } else {
+                    res.status(404).json({ message: `cant find bill with id : ${req.params.id}` });
+                }
+>>>>>>> 27739741aceb4fe4d2c67c6a522bd8711760e84b
             })
             .catch(next);
     }
