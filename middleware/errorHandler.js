@@ -1,14 +1,16 @@
 const deleteFile = require('../helpers/deleteFileGcs');
 
 function errorHandler(err, req, res, next) {
-    console.log(err);    
-    if(req.file) {
+    if (req.file) {
         let file = req.file.cloudStoragePublicUrl.split('/');
         let fileName = file[file.length - 1];
         deleteFile(fileName)
     }
-    
-    if (err.name == 'JsonWebTokenError') {
+    if (err.name == 'MulterError' && err.code == 'LIMIT_UNEXPECTED_FILE') {
+        res.status(400).json({
+            message: ["File Size Exceed"]
+        })
+    } else if (err.name == 'JsonWebTokenError') {
         res.status(401).json({
             message: ["invalid token"]
         });
@@ -17,7 +19,7 @@ function errorHandler(err, req, res, next) {
         for (r in err.errors) {
             msgValidation.push(err.errors[r].message);
         }
-
+        console.log(msgValidation);
         res.status(400).json({
             message: msgValidation
         });

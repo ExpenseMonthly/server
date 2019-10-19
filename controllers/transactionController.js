@@ -4,7 +4,8 @@ const deleteFile = require('../helpers/deleteFileGcs');
 
 class TransactionController {
     static findAll(req, res, next) {
-        let where = {};
+        const userid = req.decode._id;
+        let where = { userid };
         if (req.query.receipt_id) {
             where = { "receipt_id": { $regex: '.*' + req.query.receipt_id + '.*' } }
         }
@@ -16,11 +17,11 @@ class TransactionController {
 
     static store(req, res, next) {
         let newBill = {};
-        const { receipt_id, date, items, userid } = req.body;
-        let data = { receipt_id, date, items, userid, };
-        if (req.file) {
+        const userid = req.decode;
+        const { receipt_id, date, items } = req.body;
+        let data = { receipt_id, date, items, userid };
+        if (req.file)
             data.image_url = req.file.cloudStoragePublicUrl;
-        }
         Transaction.create(
             data
         ).then(transaction => {
@@ -43,6 +44,7 @@ class TransactionController {
             .catch(next);
     }
     // res.status(201).json(transaction)
+
 
     static findOne(req, res, next) {
         Transaction.findOne({

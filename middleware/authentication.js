@@ -7,7 +7,6 @@ function authentication(req, res, next) {
         const decode = jwt.decodeToken(token)
         req.decode = decode
         let _id = req.decode._id
-
         User.findById(_id)
             .then(user => {
                 if (user) {

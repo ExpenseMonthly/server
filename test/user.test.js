@@ -6,14 +6,13 @@ const clearDatabase = require("../helpers/test/clearDatabase");
 chai.use(chaiHttp);
 let expect = chai.expect;
 
-before(function (done) {
-    this.timeout(10000)
-    console.log("before in user test")
-    clearDatabase(done);
-});
+// before(function (done) {
+//     this.timeout(10000)
+//     console.log("before in user test")
+//     clearDatabase(done);
+// });
 
 describe('Authentication', function () {
-
     describe('register', function () {
         it('Register without error', function (done) {
             chai.request(app)
@@ -28,6 +27,7 @@ describe('Authentication', function () {
                         point: 0
                     })
                 .end(function (err, res) {
+                    console.log( res.body , '<<<<<')
                     expect(res.body).to.have.property('name');
                     expect(res.body).to.have.property('email');
                     expect(res.body.name).to.equal('candra saputra');
@@ -132,3 +132,5 @@ describe('Authentication', function () {
         });
     })
 });
+
+

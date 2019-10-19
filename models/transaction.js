@@ -4,22 +4,22 @@ const Schema = mongoose.Schema;
 const transactionSchema = new Schema({
     receipt_id: {
         type: String,
-        validate: [{
-            validator: function recieptUnique(receipt_id) {
-                return Transaction.findOne({ receipt_id: this.receipt_id })
-                    .then(function (transaction) {
-                        if (transaction) {
-                            return false;
-                        } else {
-                            return true;
-                        }
-                    })
-                    .catch(function (err) {
-                        return false;
-                    })
-            },
-            message: props => `Can't add same receipt, this receipt already been input before.`
-        }]
+        // validate: [{
+        //     validator: function recieptUnique(receipt_id) {
+        //         return Transaction.findOne({ receipt_id: this.receipt_id })
+        //             .then(function (transaction) {
+        //                 if (transaction) {
+        //                     return false;
+        //                 } else {
+        //                     return true;
+        //                 }
+        //             })
+        //             .catch(function (err) {
+        //                 return false;
+        //             })
+        //     },
+        //     message: props => `Can't add same receipt, this receipt already been input before.`
+        // }]
     },
     date: {
         type: Date,
@@ -31,7 +31,7 @@ const transactionSchema = new Schema({
     },
     image_url: {
         type: String,
-        required: [true, 'image_url is required']
+        // required: [true, 'image_url is required']
     },
     userid: {
         type: String,
