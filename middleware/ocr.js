@@ -45,17 +45,16 @@ function processText(req, res, next) {
                     items.push({ name: itemName[index], qty: a[0], price: a[1] })
                 }
             })
-            let newDate = Date(date[0].replace(".", "/"))
+            console.log(date[0])
+            let newDate = date[0].split('-')[0].split('.').reverse();
             const filteredResult = {
                 transId: transId[0],
                 date: newDate,
                 items
             }
-            console.log(filteredResult)
             req.body.receipt_id = filteredResult.transId
             req.body.date = filteredResult.date
             req.body.items = filteredResult.items
-
             next()
         })
         .catch(next)

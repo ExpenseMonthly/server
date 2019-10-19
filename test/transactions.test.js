@@ -2,6 +2,7 @@ const chai = require('chai');
 const chaiHttp = require('chai-http');
 const app = require('../app');
 const clearDatabase = require("../helpers/test/clearDatabase");
+const fs = require('fs');
 
 chai.use(chaiHttp);
 let expect = chai.expect;
@@ -34,16 +35,13 @@ let userToken = `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZGE5YjkyODdiMm
 //         })
 // });
 describe('Transactions', function () {
-    describe('create transaction', function () {
-        it('Should return new receipt without error', function (done) {
+    this.timeout(500000);
+    describe.only('create transaction', function () {
+        it.only('Should return new receipt without error', function (done) {
             chai.request(app)
                 .post('/transactions')
                 .set('token', userToken)
-                .send({
-                    receipt_id: `1234567890`,
-                    date: `2012-12-12`,
-                    items: `Arcana Panthom Assasin`
-                })
+                .attach('file', fs.readFileSync('./testingImage.jpeg'), 'testingImage.jpeg')
                 .end(function (err, res) {
                     expect(res).to.have.status(201);
                     expect(res.body).to.have.property(`items`);
@@ -53,9 +51,9 @@ describe('Transactions', function () {
                     expect(res.body).to.have.property(`userid`);
                     expect(res.body).to.have.property(`createdAt`);
                     expect(res.body).to.have.property(`updatedAt`);
-                    expect(res.body.receipt_id).to.equal('1234567890');
-                    expect(res.body.userid).to.equal('5da9b9287b2e4464f73b6717');
-                    expect(res.body.date).to.equal('2012-12-12T00:00:00.000Z');
+                    expect(res.body.receipt_id).to.include('2.1.50 930159/PRASSES/02');
+                    expect(res.body.items).to.be.an('Array');
+                    expect(res.body.userid).to.include('5da9b9287b2e4464f73b6717');
                     done();
                 })
         })
@@ -120,9 +118,9 @@ describe('Transactions', function () {
                 })
         })
     })
-    const paramId = `5da9d02eef2b4c470383f3d4`;
-    describe.only('get one transaction', function () {
-        it.only('shout get one user receipt without error', function (done) {
+    const paramId = `5daab44a4f12d466a879c4ef`;
+    describe('get one transaction', function () {
+        it('shout get one user receipt without error', function (done) {
             chai.request(app)
                 .get(`/transactions/${paramId}`)
                 .set('token', userToken)
@@ -138,6 +136,38 @@ describe('Transactions', function () {
         it('Should return error you are not authenticated user', function (done) {
             chai.request(app)
                 .post('/transactions')
+                .send()
+                .end(function (err, res) {
+                    console.log(res);
+                    console.log(res.body);
+                    expect(res).to.have.status(401);
+                    expect(res.body.message).to.be.an('Array');
+                    expect(res.body.message[0]).to.be.an('String');
+                    expect(res.body).to.have.key('message');
+                    expect(res.body.message).to.include('You are not authenticated user');
+                    done();
+                })
+        })
+    })
+    // =======================
+    describe('delete one transaction', function () {
+        it('shout delete one user receipt without error', function (done) {
+            chai.request(app)
+                .delete(`/transactions/${paramId}`)
+                .set('token', userToken)
+                .end(function (err, res) {
+                    expect(res.body).to.have.all.keys('message', 'receipt');
+                    expect(res.body.message).to.include('successfully deleted');
+                    expect(res).to.have.status(200);
+                    expect(res.body.receipt).to.have.all.keys('items', '_id', 'receipt_id', 'date', 'userid', 'image_url', 'createdAt', 'updatedAt');
+                    done();
+                })
+        })
+
+
+        it('Should return error you are not authenticated user', function (done) {
+            chai.request(app)
+                .delete(`/transactions/${paramId}`)
                 .send()
                 .end(function (err, res) {
                     console.log(res);
