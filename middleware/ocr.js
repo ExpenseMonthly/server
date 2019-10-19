@@ -66,7 +66,6 @@ function processText(req, res, next) {
             req.body.receipt_id = filteredResult.transId
             req.body.date = filteredResult.date
             req.body.items = filteredResult.items
-
             next()
         })
         .catch(next)

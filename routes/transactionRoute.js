@@ -10,7 +10,6 @@ router.use(authentication);
 router.get('/', TransactionController.findAll);
 router.post('/', multer.single('file'), sendUploadToGCS, processText, TransactionController.store);
 
-
 router.get('/:id', AuthorizationOwner, TransactionController.findOne);
 router.patch('/:id', AuthorizationOwner, multer.single('file'), sendUploadToGCS, TransactionController.update);
 router.delete('/:id', AuthorizationOwner, TransactionController.delete);

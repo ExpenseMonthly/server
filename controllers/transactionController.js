@@ -18,10 +18,11 @@ class TransactionController {
     static store(req, res, next) {
         let newBill = {};
         const userid = req.decode;
-        const { receipt_id, date, items } = req.body;
+        let { receipt_id, date, items } = req.body;
         let data = { receipt_id, date, items, userid };
-        if (req.file)
+        if (req.file) {
             data.image_url = req.file.cloudStoragePublicUrl;
+        }
         Transaction.create(
             data
         ).then(transaction => {
