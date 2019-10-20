@@ -19,7 +19,7 @@ class TransactionController {
         let newBill = {};
         const userid = req.decode;
         let { receipt_id, date, items } = req.body;
-        let data = { receipt_id, date, items: JSON.parse(items), userid };
+        let data = { receipt_id, date, items, userid };
         if (req.file) {
             data.image_url = req.file.cloudStoragePublicUrl;
         }
@@ -27,6 +27,7 @@ class TransactionController {
             data
         ).then(transaction => {
             newBill = transaction
+            newBill.totalPrice = 0;
             return User.findById(req.decode._id)
         })
             .then(receipt => {
@@ -40,7 +41,12 @@ class TransactionController {
                 })
             })
             .then(user => {
-                res.status(201).json(newBill);
+                newBill.items.forEach(item => {
+                    newBill.totalPrice += Number(item.qty) * Number(item.price);
+                });
+                // console.log(newBill);
+                // console.log(newBill.totalPrice);
+                res.status(201).json({total: newBill.totalPrice, ...newBill._doc});
             })
             .catch(next);
     }
