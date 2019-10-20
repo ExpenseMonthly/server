@@ -132,9 +132,20 @@ class TransactionController {
         const userid = req.decode._id;
         let { startDate, endDate } = req.params;
         let where = { "date": { '$gte': new Date(startDate), '$lte': new Date(endDate) }, userid }
+        const result = []
         Transaction.find(where, null, { sort: { createdAt: -1 } })
             .then(transactions => {
-                res.status(200).json(transactions);
+                transactions.forEach(({ items, _id, date, userid, createdAt, updatedAt }) => {
+                    let total = 0
+                    items.forEach(item => {
+                        total += item.price
+                    })
+                    result.push({
+                        items, _id, date, userid, createdAt, updatedAt, total
+                    })
+                })
+
+                res.status(200).json(result);
             }).catch(next);
     }
 }
