@@ -3,6 +3,24 @@ const { jwt } = require('../helpers');
 const { bcrypt } = require('../helpers');
 
 class UserController {
+
+    static getUser(req, res, next) {
+        const _id = req.decode._id;
+        User.findById({ _id })
+            .then(user => {
+                user = {
+                    name: user.name,
+                    user: user.gender,
+                    point: user.point,
+                    email: user.email,
+                    _id: user._id
+                }
+                res.status(200).json(user);
+            })
+            .catch(next);
+    }
+
+
     static register(req, res, next) {
         const { name, email, password, gender, point } = req.body
         const data = { name, email, password, gender, point };
