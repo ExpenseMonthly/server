@@ -10,8 +10,11 @@ router.use(authentication);
 router.get('/', TransactionController.findAll);
 router.post('/', multer.single('file'),sendUploadToGCS, processText );
 router.post('/receipt', TransactionController.store);
+
 router.get('/findRange/:startDate/:endDate', TransactionController.findRangeDate);
 
+router.get('/:id', AuthorizationOwner, TransactionController.findOne);
+router.patch('/:id', AuthorizationOwner, multer.single('file'), sendUploadToGCS, TransactionController.update);
 router.delete('/:id', AuthorizationOwner, TransactionController.delete);
 
 module.exports = router;
