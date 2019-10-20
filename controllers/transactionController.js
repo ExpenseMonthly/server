@@ -19,6 +19,7 @@ class TransactionController {
         let newBill = {};
         const userid = req.decode._id;
         let { receipt_id, date, items } = req.body;
+        items = JSON.parse(items);
         let data = { receipt_id, date, items, userid };
         if (req.file) {
             data.image_url = req.file.cloudStoragePublicUrl;
@@ -48,27 +49,29 @@ class TransactionController {
                     res.status(201).json({ total: newBill.totalPrice, ...newBill._doc });
                 })
                 .catch(next);
-        }
+
+            
+        })
     }
 
     static findOne(req, res, next) {
-            Transaction.findOne({
-                _id: req.params.id
-            }).then(data => {
-                if (data) {
-                    res.status(200).json(data)
-                } else {
-                    res.status(404).json({ message: `cant find bill with id : ${req.params.id}` });
-                }
-            }).catch(next);
-        }
+        Transaction.findOne({
+            _id: req.params.id
+        }).then(data => {
+            if (data) {
+                res.status(200).json(data)
+            } else {
+                res.status(404).json({ message: `cant find bill with id : ${req.params.id}` });
+            }
+        }).catch(next);
+    }
 
     static update(req, res, next) {
-            let data = {};
-            req.body.receipt_id && (data.receipt_id = req.body.receipt_id);
-            req.body.date && (data.date = req.body.date);
-            req.body.items && (data.items = req.body.items);
-            if(req.file) {
+        let data = {};
+        req.body.receipt_id && (data.receipt_id = req.body.receipt_id);
+        req.body.date && (data.date = req.body.date);
+        req.body.items && (data.items = req.body.items);
+        if (req.file) {
             data.image_url = req.file.cloudStoragePublicUrl;
         }
         Transaction.findById(req.params.id)
@@ -128,9 +131,7 @@ class TransactionController {
     static findRangeDate(req, res, next) {
         const userid = req.decode._id;
         let { startDate, endDate } = req.params;
-
         let where = { "date": { '$gte': new Date(startDate), '$lte': new Date(endDate) }, userid }
-
         Transaction.find(where, null, { sort: { createdAt: -1 } })
             .then(transactions => {
                 res.status(200).json(transactions);
