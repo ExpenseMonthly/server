@@ -19,7 +19,7 @@ class TransactionController {
         let newBill = {};
         const userid = req.decode;
         let { receipt_id, date, items } = req.body;
-        let data = { receipt_id, date, items, userid };
+        let data = { receipt_id, date, items: JSON.parse(items), userid };
         if (req.file) {
             data.image_url = req.file.cloudStoragePublicUrl;
         }

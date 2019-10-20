@@ -63,10 +63,16 @@ function processText(req, res, next) {
                 date: newDate,
                 items
             }
-            req.body.receipt_id = filteredResult.transId
-            req.body.date = filteredResult.date
-            req.body.items = filteredResult.items
-            next()
+            // req.body.receipt_id = filteredResult.transId
+            // req.body.date = filteredResult.date
+            // req.body.items = filteredResult.items
+            // next()
+            let data = {
+                receipt_id : filteredResult.transId,
+                date : filteredResult.date,
+                items : filteredResult.items
+            }
+            res.status(200).json(data);
         })
         .catch(next)
 }
