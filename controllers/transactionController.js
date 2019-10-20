@@ -17,35 +17,42 @@ class TransactionController {
 
     static store(req, res, next) {
         let newBill = {};
-        const userid = req.decode;
+        const userid = req.decode._id;
         let { receipt_id, date, items } = req.body;
-        let data = { receipt_id, date, items: JSON.parse(items), userid };
+        items = JSON.parse(items);
+        let data = { receipt_id, date, items, userid };
         if (req.file) {
             data.image_url = req.file.cloudStoragePublicUrl;
         }
+
         Transaction.create(
             data
         ).then(transaction => {
             newBill = transaction
+            newBill.totalPrice = 0;
             return User.findById(req.decode._id)
-        })
-            .then(receipt => {
-                let point = receipt.point + 1;
-                return User.findOneAndUpdate({
-                    _id: req.decode._id
-                }, {
-                    point
-                }, {
-                    new: true
+        }).then(receipt => {
+            let point = receipt.point + 1;
+            return User.findOneAndUpdate({
+                _id: req.decode._id
+            }, {
+                point
+            }, {
+                new: true
+            })
+                .then(user => {
+                    newBill.items.forEach(item => {
+                        newBill.totalPrice += Number(item.qty) * Number(item.price);
+                    });
+                    // console.log(newBill);
+                    // console.log(newBill.totalPrice);
+                    res.status(201).json({ total: newBill.totalPrice, ...newBill._doc });
                 })
-            })
-            .then(user => {
-                res.status(201).json(newBill);
-            })
-            .catch(next);
-    }
-    // res.status(201).json(transaction)
+                .catch(next);
 
+            
+        })
+    }
 
     static findOne(req, res, next) {
         Transaction.findOne({
@@ -119,6 +126,16 @@ class TransactionController {
                 res.status(200).json({ message: 'successfully deleted', receipt });
             })
             .catch(next);
+    }
+
+    static findRangeDate(req, res, next) {
+        const userid = req.decode._id;
+        let { startDate, endDate } = req.params;
+        let where = { "date": { '$gte': new Date(startDate), '$lte': new Date(endDate) }, userid }
+        Transaction.find(where, null, { sort: { createdAt: -1 } })
+            .then(transactions => {
+                res.status(200).json(transactions);
+            }).catch(next);
     }
 }
 
