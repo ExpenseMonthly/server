@@ -45,17 +45,34 @@ function processText(req, res, next) {
                     items.push({ name: itemName[index], qty: a[0], price: a[1] })
                 }
             })
-            console.log(date[0])
-            let newDate = date[0].split('-')[0].split('.').reverse();
+            let mydate = date[0]
+            let dateConvert = mydate.split('-')[0]
+            let time = mydate.split('-')[1]
+
+            let day = dateConvert.split('.')[0]
+            let month = dateConvert.split('.')[1]
+            let year = dateConvert.split('.')[2]
+
+            let minute = time.split(':')[0]
+            let second = time.split(':')[1]
+
+            let newDate = new Date(`${month} ${day} ${year} ${minute}:${second} UTC`);
+
             const filteredResult = {
                 transId: transId[0],
                 date: newDate,
                 items
             }
-            req.body.receipt_id = filteredResult.transId
-            req.body.date = filteredResult.date
-            req.body.items = filteredResult.items
-            next()
+            // req.body.receipt_id = filteredResult.transId
+            // req.body.date = filteredResult.date
+            // req.body.items = filteredResult.items
+            // next()
+            let data = {
+                receipt_id : filteredResult.transId,
+                date : filteredResult.date,
+                items : filteredResult.items
+            }
+            res.status(200).json(data);
         })
         .catch(next)
 }
