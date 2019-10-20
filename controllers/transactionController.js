@@ -126,6 +126,7 @@ class TransactionController {
 
         Transaction.find(where, null, { sort: { createdAt: -1 } })
             .then(transactions => {
+                console.log(transactions)
                 res.status(200).json(transactions);
             }).catch(next);
     }
