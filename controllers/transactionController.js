@@ -17,35 +17,32 @@ class TransactionController {
 
     static store(req, res, next) {
         let newBill = {};
-        const userid = req.decode;
+        const userid = req.decode._id;
         let { receipt_id, date, items } = req.body;
-        let data = { receipt_id, date, items: JSON.parse(items), userid };
+        let data = { receipt_id, date, items, userid };
+
         if (req.file) {
             data.image_url = req.file.cloudStoragePublicUrl;
         }
+
         Transaction.create(
             data
         ).then(transaction => {
             newBill = transaction
             return User.findById(req.decode._id)
-        })
-            .then(receipt => {
-                let point = receipt.point + 1;
-                return User.findOneAndUpdate({
-                    _id: req.decode._id
-                }, {
-                    point
-                }, {
-                    new: true
-                })
+        }).then(receipt => {
+            let point = receipt.point + 1;
+            return User.findOneAndUpdate({
+                _id: req.decode._id
+            }, {
+                point
+            }, {
+                new: true
             })
-            .then(user => {
-                res.status(201).json(newBill);
-            })
-            .catch(next);
+        }).then(user => {
+            res.status(201).json(newBill);
+        }).catch(next);
     }
-    // res.status(201).json(transaction)
-
 
     static findOne(req, res, next) {
         Transaction.findOne({

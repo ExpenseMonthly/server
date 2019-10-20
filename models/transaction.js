@@ -34,7 +34,8 @@ const transactionSchema = new Schema({
         // required: [true, 'image_url is required']
     },
     userid: {
-        type: String,
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
         required: [true, 'userid is required']
     }
 }, {
