@@ -70,7 +70,8 @@ function processText(req, res, next) {
             let data = {
                 receipt_id : filteredResult.transId,
                 date : filteredResult.date,
-                items : filteredResult.items
+                items : filteredResult.items,
+                image_url: req.file.cloudStoragePublicUrl 
             }
             res.status(200).json(data);
         })

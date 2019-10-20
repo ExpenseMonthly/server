@@ -18,12 +18,9 @@ class TransactionController {
     static store(req, res, next) {
         let newBill = {};
         const userid = req.decode._id;
-        let { receipt_id, date, items } = req.body;
+        let { receipt_id, date, items, image_url } = req.body;
         items = JSON.parse(items);
-        let data = { receipt_id, date, items, userid };
-        if (req.file) {
-            data.image_url = req.file.cloudStoragePublicUrl;
-        }
+        let data = { receipt_id, date, items, userid, image_url };
 
         Transaction.create(
             data
@@ -50,7 +47,7 @@ class TransactionController {
                 })
                 .catch(next);
 
-            
+
         })
     }
 
@@ -132,9 +129,20 @@ class TransactionController {
         const userid = req.decode._id;
         let { startDate, endDate } = req.params;
         let where = { "date": { '$gte': new Date(startDate), '$lte': new Date(endDate) }, userid }
+        const result = []
         Transaction.find(where, null, { sort: { createdAt: -1 } })
             .then(transactions => {
-                res.status(200).json(transactions);
+                transactions.forEach(({ items, _id, date, userid, createdAt, updatedAt }) => {
+                    let total = 0
+                    items.forEach(item => {
+                        total += item.price
+                    })
+                    result.push({
+                        items, _id, date, userid, createdAt, updatedAt, total
+                    })
+                })
+
+                res.status(200).json(result);
             }).catch(next);
     }
 }
