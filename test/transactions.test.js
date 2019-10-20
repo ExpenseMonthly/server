@@ -85,6 +85,48 @@ describe('Transactions', function () {
                 .set('token', userToken)
                 .send(orcRespond)
                 .end(function (err, res) {
+                    expect(res).to.have.status(201);
+                    expect(res.body).to.have.property(`items`);
+                    expect(res.body).to.have.property(`receipt_id`);
+                    expect(res.body).to.have.property(`date`);
+                    expect(res.body.receipt_id).to.include('2.1.50 930159/PRASSES/02');
+                    expect(res.body.items).to.be.an('Array');
+                    done();
+                })
+        })
+
+        const orcRespond = {
+            items: [
+                {
+                  name: 'TAO KAE CRISPY CLS' ,
+                  qty: 2,
+                  price: 4200
+                },
+                {
+                  name: 'PORORO STROBRI' ,
+                  qty: 1,
+                  price: 12200
+                },
+                {
+                  name: 'WALLS BRWN AVCDO' ,
+                  qty: 1,
+                  price: 5200
+                },
+                {
+                  name: 'KUSUKA KRP AYM LD' ,
+                  qty: 1,
+                  price: 8300
+                }
+              ],
+              receipt_id: '2.1.50 930159/PRASSES/02',
+              date: '2019-10-17T13:02:00.000Z',
+        }
+        it.only('Should return orc respond without error', function (done) {
+            chai.request(app)
+                .post('/transactions/receipt')
+                .set('token', userToken)
+                .send(orcRespond)
+                .end(function (err, res) {
                     console.log(res.body);
                     // expect(res).to.have.status(201);
                     // expect(res.body).to.have.property(`items`);
