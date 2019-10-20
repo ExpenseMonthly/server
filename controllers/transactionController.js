@@ -126,16 +126,16 @@ class TransactionController {
         const result = []
         Transaction.find(where, null, { sort: { createdAt: -1 } })
             .then(transactions => {
-                transactions.forEach( ({ items ,_id ,date, userid,createdAt,updatedAt})  => {
-                    let total =0
-                    items.forEach( item => {
+                transactions.forEach(({ items, _id, date, userid, createdAt, updatedAt }) => {
+                    let total = 0
+                    items.forEach(item => {
                         total += item.price
                     })
-                    result.push({ 
-                        items, _id ,date, userid, createdAt, updatedAt, total
+                    result.push({
+                        items, _id, date, userid, createdAt, updatedAt, total
                     })
                 })
-                
+
                 res.status(200).json(result);
             }).catch(next);
     }
