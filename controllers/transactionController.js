@@ -117,6 +117,18 @@ class TransactionController {
             })
             .catch(next);
     }
+
+    static findRangeDate(req, res, next) {
+        const userid = req.decode._id;
+        let { startDate, endDate } = req.params;
+
+        let where = { "date": { '$gte': new Date(startDate), '$lte': new Date(endDate) }, userid }
+
+        Transaction.find(where, null, { sort: { createdAt: -1 } })
+            .then(transactions => {
+                res.status(200).json(transactions);
+            }).catch(next);
+    }
 }
 
 module.exports = TransactionController
