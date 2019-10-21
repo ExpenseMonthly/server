@@ -14,6 +14,7 @@ function processText(req, res, next) {
     client.textDetection(`gs://${GOOGLE_BUCKET}/${filename}`)
         .then(([result]) => {
             const detections = result.textAnnotations
+            
             const textResult = detections[0].description.split('\n')
             const content = []
             let isItem = false
@@ -46,17 +47,21 @@ function processText(req, res, next) {
                 }
             })
             let mydate = date[0]
-            let dateConvert = mydate.split('-')[0]
-            let time = mydate.split('-')[1]
-
-            let day = dateConvert.split('.')[0]
-            let month = dateConvert.split('.')[1]
-            let year = dateConvert.split('.')[2]
-
-            let minute = time.split(':')[0]
-            let second = time.split(':')[1]
-
-            let newDate = new Date(`${month} ${day} ${year} ${minute}:${second} UTC`);
+            let newDate = null
+            if ( typeof mydate !== 'undefined' || mydate ) {
+                
+                let dateConvert = mydate.split('-')[0]
+                let time = mydate.split('-')[1]
+    
+                let day = dateConvert.split('.')[0]
+                let month = dateConvert.split('.')[1]
+                let year = dateConvert.split('.')[2]
+    
+                let minute = time.split(':')[0]
+                let second = time.split(':')[1]
+    
+                newDate = new Date(`${month} ${day} ${year} ${minute}:${second} UTC`);
+            }
 
             const filteredResult = {
                 transId: transId[0],

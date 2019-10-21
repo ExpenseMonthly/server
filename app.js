@@ -27,8 +27,8 @@ mongoose.connect(MONGO_CONNECTION + '-test', { useNewUrlParser: true, useUnified
 // });
 
 app.use(cors())
-    .use(express.json())
-    .use(express.urlencoded({ extended: false }))
+    .use(express.json({limit: Infinity}))
+    .use(express.urlencoded({ extended: false, limit: Infinity }))
 
 app.use('/', routes);
 
