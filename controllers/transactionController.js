@@ -68,15 +68,9 @@ class TransactionController {
         req.body.receipt_id && (data.receipt_id = req.body.receipt_id);
         req.body.date && (data.date = req.body.date);
         req.body.items && (data.items = req.body.items);
-        if (req.file) {
-            data.image_url = req.file.cloudStoragePublicUrl;
-        }
         Transaction.findById(req.params.id)
             .then(receipt => {
                 if (receipt) {
-                    let file = receipt.image_url.split('/');
-                    let fileName = file[file.length - 1];
-                    deleteFile(fileName);
                     return Transaction.findOneAndUpdate({
                         _id: req.params.id
                     }, data, {
