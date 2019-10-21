@@ -4,6 +4,19 @@ const { bcrypt } = require('../helpers');
 
 class UserController {
 
+    static getProfileInfo(req, res, next) {
+        const _id = req.decode._id;
+        User.findById({ _id })
+            .then(user => {
+                if (user) {
+                    res.status(200).json(user);
+                } else {
+                    next({ status: 404, message: 'user not found' });
+                }
+            })
+            .catch(next);
+    }
+
     static getUser(req, res, next) {
         const _id = req.decode._id;
         User.findById({ _id })
