@@ -9,5 +9,6 @@ router.post('/register', multer.single('profile_url'), sendUploadToGCS, UserCont
 router.post('/login', UserController.login);
 
 router.get('/', Authentication, UserController.getUser);
+router.get('/info', Authentication, UserController.getProfile);
 
 module.exports = router;

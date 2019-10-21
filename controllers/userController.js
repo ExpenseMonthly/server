@@ -8,19 +8,35 @@ class UserController {
         const _id = req.decode._id;
         User.findById({ _id })
             .then(user => {
-                user = {
-                    name: user.name,
-                    gender: user.gender,
-                    point: user.point,
-                    email: user.email,
-                    _id: user._id
+                if (user) {
+                    user = {
+                        _id: user._id,
+                        gender: user.gender,
+                        email: user.email,
+                        point: user.point,
+                        name: user.name
+                    }
+                    res.status(200).json(user);
+                } else {
+                    next({ status: 404, message: `User not found` });
                 }
-                res.status(200).json(user);
             })
             .catch(next);
     }
 
-
+    static getProfile(req, res, next) {
+        const _id = req.decode._id;
+        User.findById({ _id })
+            .then(user => {
+                if (user) {
+                    res.status(200).json(user);
+                } else {
+                    next({ status: 404, message: `User not found` });
+                }
+            })
+            .catch(next);
+    }
+    
     static register(req, res, next) {
         const { name, email, password, gender, point } = req.body
         const data = { name, email, password, gender, point };

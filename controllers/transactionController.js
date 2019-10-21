@@ -3,6 +3,7 @@ const User = require('../models/user');
 const deleteFile = require('../helpers/deleteFileGcs');
 
 class TransactionController {
+
     static findAll(req, res, next) {
         const userid = req.decode._id;
         let where = { userid };
