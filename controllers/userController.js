@@ -10,7 +10,7 @@ class UserController {
             .then(user => {
                 user = {
                     name: user.name,
-                    user: user.gender,
+                    gender: user.gender,
                     point: user.point,
                     email: user.email,
                     _id: user._id

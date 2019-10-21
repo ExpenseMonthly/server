@@ -19,7 +19,6 @@ class TransactionController {
         let newBill = {};
         const userid = req.decode._id;
         let { receipt_id, date, items, image_url } = req.body;
-        items = JSON.parse(items);
         let data = { receipt_id, date, items, userid, image_url };
 
         Transaction.create(
@@ -98,9 +97,11 @@ class TransactionController {
             .then(data => {
                 if (data) {
                     receipt = data;
-                    let file = data.image_url.split('/');
-                    let fileName = file[file.length - 1];
-                    deleteFile(fileName);
+                    if (data.image_url) {
+                        let file = data.image_url.split('/');
+                        let fileName = file[file.length - 1];
+                        deleteFile(fileName);
+                    }
                     return User.findById(req.decode._id)
                 } else {
                     res.status(404).json({ message: `cant find bill with id : ${req.params.id}` });
