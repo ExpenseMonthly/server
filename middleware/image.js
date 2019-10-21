@@ -26,7 +26,7 @@ const sendUploadToGCS = (req, res, next) => {
 
         const stream = file.createWriteStream({
             metadata: {
-                contentType: req.file.mimetype
+                contentType: req.file.mimetype,
             }
         })
 
@@ -63,7 +63,7 @@ const Multer = require('multer'),
         },
         storage: Multer.MemoryStorage,
         limits: {
-            fileSize: 1024 * 1024 * 10
+            fileSize: Infinity
         }
     })
 
