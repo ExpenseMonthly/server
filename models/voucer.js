@@ -17,6 +17,10 @@ const voucerSchema = new Schema({
     description: {
         type: String,
         required: [true, 'Description is required']
+    },
+    point: {
+        type: Number,
+        required: [true, 'Point is required']
     }
 }, {
     timestamps: true
