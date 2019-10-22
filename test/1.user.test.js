@@ -11,7 +11,7 @@ before(function (done) {
     console.log("before in user test")
     clearDatabase(done);
 });
-
+  
 describe('Authentication', function () {
     describe('register', function () {
         it('Register without error', function (done) {
