@@ -60,10 +60,12 @@ const userSchema = new Schema({
         required: [true, 'Point is required'],
         default: 0
     },
-    voucers: {
-        type: Array,
-        default: []
-    },
+    voucers: [
+        {
+            type: Schema.Types.ObjectId,
+            ref: "Voucer"
+        }
+    ],
 }, {
     timestamps: true
 })
