@@ -3,3 +3,4 @@ node_modules
 keyfile.json
 .directory
 .DS_Store
+.nyc_output

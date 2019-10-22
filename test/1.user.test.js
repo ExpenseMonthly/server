@@ -6,11 +6,11 @@ const clearDatabase = require("../helpers/test/clearDatabase");
 chai.use(chaiHttp);
 let expect = chai.expect;
 
-// before(function (done) {
-//     this.timeout(10000)
-//     console.log("before in user test")
-//     clearDatabase(done);
-// });
+before(function (done) {
+    this.timeout(10000)
+    console.log("before in user test")
+    clearDatabase(done);
+});
 
 describe('Authentication', function () {
     describe('register', function () {
@@ -27,7 +27,6 @@ describe('Authentication', function () {
                         point: 0
                     })
                 .end(function (err, res) {
-                    console.log( res.body , '<<<<<')
                     expect(res.body).to.have.property('name');
                     expect(res.body).to.have.property('email');
                     expect(res.body.name).to.equal('candra saputra');
@@ -78,27 +77,15 @@ describe('Authentication', function () {
         });
     })
 
+    let userToken = ''
     describe('login', function () {
-        it('Login member without error', function (done) {
-            chai.request(app)
-                .post('/users/login')
-                .send({ email: 'candrasaputra@live.com', password: 'password123' })
-                .end(function (err, res) {
-                    customerToken = res.body.token;
-                    expect(res.body).to.have.property('token');
-                    expect(res.body).to.have.property('user');
-                    expect(res.body.user).to.include.keys(['_id', 'name', 'email']);
-                    expect(res).to.have.status(200);
-                    done();
-                })
-        });
 
-        it('Login admin without error', function (done) {
+        it('Login without error', function (done) {
             chai.request(app)
                 .post('/users/login')
                 .send({ email: 'candrasaputra@live.com', password: 'password123' })
                 .end(function (err, res) {
-                    adminToken = res.body.token;
+                    userToken = res.body.token;
                     expect(res.body).to.have.property('token');
                     expect(res.body).to.have.property('user');
                     expect(res.body.user).to.include.keys(['_id', 'name', 'email']);
@@ -130,6 +117,62 @@ describe('Authentication', function () {
                     done();
                 })
         });
+    })
+
+    describe('GET /users', function () {
+        it("Succesfully get user", function (done) {
+            chai
+                .request(app)
+                .get("/users")
+                .set("token", userToken)
+                .end(function (err, res) {
+                    expect(err).to.be.null;
+                    expect(res).to.have.status(200);
+                    expect(res.body).to.be.an("object")
+                    expect(res.body).to.have.keys(["_id", "gender", "email", "point", "name"]);
+                    done();
+                })
+        })
+        
+        it("error token not found", function (done) {
+            chai
+                .request(app)
+                .get("/users")
+                .end(function (err, res) {
+                    console.log(res.body.message);
+                    expect(res.body).to.have.property('message');
+                    expect(res.body.message).to.have.members(['You are not authenticated user']);
+                    done();
+                })
+        })
+    })
+    
+    describe('GET /users/info', function () {
+        it("Succesfully get user", function (done) {
+            chai
+                .request(app)
+                .get("/users/info")
+                .set("token", userToken)
+                .end(function (err, res) {
+                    expect(err).to.be.null;
+                    expect(res).to.have.status(200);
+                    expect(res.body).to.be.an("object")
+                    expect(res.body).to.have.keys(["__v","_id", "gender", "email", "point", "name", "password", "voucers", "createdAt", "updatedAt"]);
+                    done();
+                })
+        })
+
+        it("error token not found", function (done) {
+            chai
+                .request(app)
+                .get("/users/info")
+                .end(function (err, res) {
+                    console.log(res.body.message);
+                    expect(res.body).to.have.property('message');
+                    expect(res.body.message).to.have.members(['You are not authenticated user']);
+                    done();
+                })
+        })
     })
 });
 

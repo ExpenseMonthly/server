@@ -36,7 +36,7 @@ class UserController {
             })
             .catch(next);
     }
-    
+
     static register(req, res, next) {
         const { name, email, password, gender, point } = req.body
         const data = { name, email, password, gender, point };

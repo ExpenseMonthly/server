@@ -1,7 +1,6 @@
 const chai = require('chai');
 const chaiHttp = require('chai-http');
 const app = require('../app');
-const clearDatabase = require("../helpers/test/clearDatabase");
 const fs = require('fs');
 
 chai.use(chaiHttp);
@@ -266,9 +265,4 @@ describe('Transactions', function () {
                 })
         })
     })
-})
-
-
-after(function () {
-    // clearDatabase(app)
 })
