@@ -3,22 +3,20 @@ const deleteFile = require('../helpers/deleteFileGcs');
 
 class VoucerController {
     static findAll(req, res, next) {
-        let where = {};
-        if (req.query.title) {
-            where = { "title": { $regex: '.*' + req.query.title + '.*' } }
-        }
-        Voucer.find(where)
+        Voucer.find()
             .then(voucers => {
                 res.status(200).json(voucers);
             }).catch(next);
     }
 
     static store(req, res, next) {
-        const { title, expire_date, description } = req.body;
-        const data = { title, expire_date, description };
+        const { title, expire_date, description, point } = req.body;
+        const data = { title, expire_date, description, point };
+        /* istanbul ignore next */
         if (req.file) {
             data.image = req.file.cloudStoragePublicUrl;
         }
+        /* istanbul ignore next */
 
         Voucer.create(
             data
@@ -36,10 +34,10 @@ class VoucerController {
     }
 
     static update(req, res, next) {
-        const { title, expire_date, description } = req.body;
-        const data = { title, expire_date, description };
+        const { title, expire_date, description, point } = req.body;
+        const data = { title, expire_date, description, point };
 
-        Voucer.findOneAndUpdate({ _id: req.params.id }, data, { omitUndefined: true, runValidators: true })
+        Voucer.findOneAndUpdate({ _id: req.params.id }, data, { omitUndefined: true, runValidators: true, new: true })
             .then(data => {
                 res.status(200).json({ message: 'successfully updated', data });
             })
@@ -49,11 +47,13 @@ class VoucerController {
     static delete(req, res, next) {
         Voucer.findByIdAndDelete(req.params.id)
             .then(data => {
+                /* istanbul ignore next */
                 if (data.image) {
                     let file = data.image.split('/');
                     let fileName = file[file.length - 1];
                     deleteFile(fileName);
                 }
+                /* istanbul ignore next */
                 
                 res.status(200).json({ message: 'successfully deleted', data });
             })

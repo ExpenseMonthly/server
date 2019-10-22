@@ -6,6 +6,8 @@ const clearDatabase = require("../helpers/test/clearDatabase");
 chai.use(chaiHttp);
 let expect = chai.expect;
 
+let userToken = "";
+
 before(function (done) {
     this.timeout(10000)
     console.log("before in user test")
@@ -77,7 +79,6 @@ describe('Authentication', function () {
         });
     })
 
-    let userToken = ''
     describe('login', function () {
 
         it('Login without error', function (done) {
@@ -90,6 +91,18 @@ describe('Authentication', function () {
                     expect(res.body).to.have.property('user');
                     expect(res.body.user).to.include.keys(['_id', 'name', 'email']);
                     expect(res).to.have.status(200);
+                    done();
+                })
+        });
+        
+        it('Error email or password not found', function (done) {
+            chai.request(app)
+                .post('/users/login')
+                .send({ email: 'candrasaputra2@live.com', password: 'password' })
+                .end(function (err, res) {
+                    expect(res.body).to.have.property('message');
+                    expect(res.body.message).to.have.members(['email/password not found']);
+                    expect(res).to.have.status(400);
                     done();
                 })
         });

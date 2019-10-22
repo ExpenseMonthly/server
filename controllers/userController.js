@@ -8,18 +8,14 @@ class UserController {
         const _id = req.decode._id;
         User.findById({ _id })
             .then(user => {
-                if (user) {
-                    user = {
-                        _id: user._id,
-                        gender: user.gender,
-                        email: user.email,
-                        point: user.point,
-                        name: user.name
-                    }
-                    res.status(200).json(user);
-                } else {
-                    next({ status: 404, message: `User not found` });
+                user = {
+                    _id: user._id,
+                    gender: user.gender,
+                    email: user.email,
+                    point: user.point,
+                    name: user.name
                 }
+                res.status(200).json(user);
             })
             .catch(next);
     }
@@ -28,11 +24,7 @@ class UserController {
         const _id = req.decode._id;
         User.findById({ _id })
             .then(user => {
-                if (user) {
-                    res.status(200).json(user);
-                } else {
-                    next({ status: 404, message: `User not found` });
-                }
+                res.status(200).json(user);
             })
             .catch(next);
     }
@@ -40,10 +32,12 @@ class UserController {
     static register(req, res, next) {
         const { name, email, password, gender, point } = req.body
         const data = { name, email, password, gender, point };
-
+        
+        /* istanbul ignore next */
         if (req.file) {
             data.profile_url = req.file.cloudStoragePublicUrl;
         }
+        /* istanbul ignore next */
 
         User.create(data)
             .then(result => {

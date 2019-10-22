@@ -9,7 +9,7 @@ router.get('/', VoucerController.findAll);
 router.post('/', multer.single('image'), sendUploadToGCS, VoucerController.store);
 
 router.get('/:id', VoucerController.findOne);
-router.patch('/:id', VoucerController.update);
+router.patch('/:id', multer.single('image'), sendUploadToGCS, VoucerController.update);
 router.delete('/:id', VoucerController.delete);
 
 module.exports = router;
