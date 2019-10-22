@@ -59,7 +59,11 @@ const userSchema = new Schema({
         type: Number,
         required: [true, 'Point is required'],
         default: 0
-    }
+    },
+    voucers: {
+        type: Array,
+        default: []
+    },
 }, {
     timestamps: true
 })
