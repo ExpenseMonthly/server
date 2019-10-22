@@ -4,6 +4,31 @@ const { bcrypt } = require('../helpers');
 
 class UserController {
 
+    static update(req, res, next) {
+        const _id = req.decode._id;
+        User.findById({
+            _id
+        })
+            .then(user => {
+                if (user) {
+                    const point = user.point + Number(req.body.point);
+                    return User.findOneAndUpdate({
+                        _id
+                    }, {
+                        point
+                    }, {
+                        new: true
+                    })
+                } else {
+                    next({ status: 404, message: `User not exist` });
+                }
+            })
+            .then(user => {
+                res.status(200).json({ message: `User point has been updated`, user });
+            })
+            .catch(next);
+    }
+
     static getUser(req, res, next) {
         const _id = req.decode._id;
         User.findById({ _id })

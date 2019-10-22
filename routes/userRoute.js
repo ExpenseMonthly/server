@@ -10,5 +10,5 @@ router.post('/login', UserController.login);
 
 router.get('/', Authentication, UserController.getUser);
 router.get('/info', Authentication, UserController.getProfile);
-
+router.patch('/point', Authentication, UserController.update);
 module.exports = router;
