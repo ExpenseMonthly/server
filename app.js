@@ -25,11 +25,11 @@ mongoose.connect(MONGO_CONNECTION + testing, { useNewUrlParser: true, useUnified
         console.log('Database connection failed'); console.log(err);
     }
     /* istanbul ignore next */
-    else console.log(`Database connected to : ${MONGO_CONNECTION}`)
+    else console.log(`Database connected to : ${MONGO_CONNECTION + testing}`)
 });
 
 app.use(cors())
-    .use(express.json({limit: Infinity}))
+    .use(express.json({ limit: Infinity }))
     .use(express.urlencoded({ extended: false, limit: Infinity }))
 
 app.use('/', routes);
