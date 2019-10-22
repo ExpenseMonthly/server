@@ -21,7 +21,12 @@ class TransactionController {
         const userid = req.decode._id;
         let { receipt_id, date, items, image_url } = req.body;
         let data = { receipt_id, date, items, userid, image_url };
-
+        
+        items.map(item => {
+            item.qty = Number(item.qty);
+            item.price = Number(item.price);            
+        });
+        
         Transaction.create(
             data
         ).then(transaction => {
@@ -46,8 +51,6 @@ class TransactionController {
                     res.status(201).json({ total: newBill.totalPrice, ...newBill._doc });
                 })
                 .catch(next);
-
-
         })
     }
 
