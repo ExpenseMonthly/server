@@ -27,14 +27,15 @@ class UserController {
 
     static getUser(req, res, next) {
         const _id = req.decode._id;
-        User.findById({ _id })
+        User.findById({ _id }).populate('voucers')
             .then(user => {
                 user = {
                     _id: user._id,
                     gender: user.gender,
                     email: user.email,
                     point: user.point,
-                    name: user.name
+                    name: user.name,
+                    voucers: user.voucers
                 }
                 res.status(200).json(user);
             })
@@ -104,6 +105,17 @@ class UserController {
                         next({ statusCode: 400, msg: "email/password not found" });
                     }
                 }
+            })
+            .catch(next)
+    }
+    static addVoucer(req, res, next) {
+        const { voucerid } = req.params;
+        const userId = req.decode._id
+        User.findByIdAndUpdate(userId, {
+            $push: { voucers: voucerid }
+        }, { new: true })
+            .then(user => {
+                res.status(201).json({ statusCode: 201, user })
             })
             .catch(next)
     }

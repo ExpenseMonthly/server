@@ -15,7 +15,9 @@ let expect = chai.expect;
 //     point: 0
 // }
 let loggedUser = null
+let transaction = {
 
+}
 describe('Transactions', function () {
     before(function (done) {
         chai.request(app)
@@ -23,7 +25,6 @@ describe('Transactions', function () {
             .send({ email: 'candrasaputra@live.com', password: 'password123' })
             .end(function (err, res) {
                 loggedUser = res.body
-                // console.log(loggedUser, "<<<<<<<< LOGGED USER")
                 done();
             })
     });
@@ -36,14 +37,17 @@ describe('Transactions', function () {
                 done()
             })
     })
-    // it('Should return created transaction' , () => {
-    //     chai.request(app)
-    //     .post('/transactions/')
-    //     .send({ })
-    //     .end( function ( err ,res ) {
-    //         console.log()
-    //     })
-    // })
+    it('Should return created transaction', () => {
+        chai.request(app)
+            .post('/transactions')
+            .set('token', loggedUser.token)
+            .send({
+
+            })
+            .end(function (err, res) {
+                console.log()
+            })
+    })
 })
 
 // describe('Transactions', function () {
