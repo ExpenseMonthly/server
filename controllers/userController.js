@@ -10,18 +10,14 @@ class UserController {
             _id
         })
             .then(user => {
-                if (user) {
-                    const point = user.point + Number(req.body.point);
-                    return User.findOneAndUpdate({
-                        _id
-                    }, {
-                        point
-                    }, {
-                        new: true
-                    })
-                } else {
-                    next({ status: 404, message: `User not exist` });
-                }
+                const point = user.point + Number(req.body.point);
+                return User.findOneAndUpdate({
+                    _id
+                }, {
+                    point
+                }, {
+                    new: true
+                })
             })
             .then(user => {
                 res.status(200).json({ message: `User point has been updated`, user });
@@ -57,7 +53,7 @@ class UserController {
     static register(req, res, next) {
         const { name, email, password, gender, point } = req.body
         const data = { name, email, password, gender, point };
-        
+
         /* istanbul ignore next */
         if (req.file) {
             data.profile_url = req.file.cloudStoragePublicUrl;
