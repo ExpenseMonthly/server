@@ -45,6 +45,7 @@ class UserController {
     static getProfile(req, res, next) {
         const _id = req.decode._id;
         User.findById({ _id })
+            .populate('voucers')
             .then(user => {
                 res.status(200).json(user);
             })
