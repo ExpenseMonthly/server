@@ -102,7 +102,6 @@ describe('Voucer', function () {
                 .field("point", 250)
                 .attach('image', fs.readFileSync('./img.jpg'), 'img.jpg')
                 .end(function (err, res) {
-
                     expect(err).to.be.null;
                     expect(res).to.have.status(201);
                     expect(res.body).to.be.an("object")
@@ -115,6 +114,7 @@ describe('Voucer', function () {
                     done();
                 })
         })
+
         it("Should error create voucer without sending token to server (status: 401)", function (done) {
             chai
                 .request(app)

@@ -26,7 +26,8 @@ describe('Authentication', function () {
                         password: 'password123',
                         gender: 'male',
                         profile_url: 'tes.jpg',
-                        point: 0
+                        point: 0,
+                        voucers: []
                     })
                 .end(function (err, res) {
                     expect(res.body).to.have.property('name');
@@ -49,7 +50,8 @@ describe('Authentication', function () {
                         password: 'password123',
                         gender: 'male',
                         profile_url: 'tes.jpg',
-                        point: 0
+                        point: 0,
+                        voucers: []
                     })
                 .end(function (err, res) {
                     expect(res.body.message).to.have.members(['Email has been used']);
@@ -68,7 +70,8 @@ describe('Authentication', function () {
                         password: 'password',
                         gender: 'male',
                         profile_url: 'tes.jpg',
-                        point: 0
+                        point: 0,
+                        voucers: []
                     }
                 )
                 .end(function (err, res) {
@@ -142,7 +145,7 @@ describe('Authentication', function () {
                     expect(err).to.be.null;
                     expect(res).to.have.status(200);
                     expect(res.body).to.be.an("object")
-                    expect(res.body).to.have.keys(["_id", "gender", "email", "point", "name"]);
+                    expect(res.body).to.have.keys(["_id", "gender", "email", "point", "name", "voucers"]);
                     done();
                 })
         })
@@ -179,6 +182,40 @@ describe('Authentication', function () {
             chai
                 .request(app)
                 .get("/users/info")
+                .end(function (err, res) {
+                    console.log(res.body.message);
+                    expect(res.body).to.have.property('message');
+                    expect(res.body.message).to.have.members(['You are not authenticated user']);
+                    done();
+                })
+        })
+    })
+    
+    describe('PATCH /users/point', function () {
+        it("Succesfully patch user point", function (done) {
+            chai
+                .request(app)
+                .patch("/users/point")
+                .set("token", userToken)
+                .send({
+                    point: 20
+                })
+                .end(function (err, res) {
+                    expect(err).to.be.null;
+                    expect(res).to.have.status(200);
+                    expect(res.body.user).to.be.an("object")
+                    expect(res.body.user).to.have.keys(["__v","_id", "gender", "email", "point", "name", "password", "voucers", "createdAt", "updatedAt"]);
+                    done();
+                })
+        })
+
+        it("error token not found", function (done) {
+            chai
+                .request(app)
+                .patch("/users/point")
+                .send({
+                    point: 20
+                })
                 .end(function (err, res) {
                     console.log(res.body.message);
                     expect(res.body).to.have.property('message');
