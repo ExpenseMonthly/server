@@ -1,0 +1,6 @@
+node_modules
+.env
+keyfile.json
+.directory
+.DS_Store
+.nyc_output
