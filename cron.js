@@ -3,7 +3,6 @@ var CronJob = require('cron').CronJob;
 var kue = require('kue')
     , queue = kue.createQueue();
 const Voucers = require('./models/voucer');
-const User = require('./models/user')
 
 async function deleteTransaction(done) {
     /* istanbul ignore next */

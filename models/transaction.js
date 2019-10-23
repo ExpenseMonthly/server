@@ -17,7 +17,7 @@ const transactionSchema = new Schema({
                         } else {
                             /* istanbul ignore next */
                             return true;
-                        }
+                        }``
                     })
                     /* istanbul ignore next */
                     .catch(function (err) {

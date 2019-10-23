@@ -17,8 +17,10 @@ let voucers = [
     }
 ]
 
-module.exports = function (done) {
+function seedVoucer (done) {
+    /* istanbul ignore next */
     if (process.env.NODE_ENV === 'test') {
+    /* istanbul ignore next */
         Voucer.insertMany(voucers)
             .then(result => {
                 done()
@@ -27,3 +29,4 @@ module.exports = function (done) {
     }
 };
 
+module.exports = seedVoucer

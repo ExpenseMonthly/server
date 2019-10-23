@@ -1,6 +1,6 @@
 const express = require('express');
 const TransactionController = require('../controllers/transactionController');
-const { multer, sendUploadToGCS, getPublicUrl } = require('../middleware/image');
+const { sendUploadToGCS } = require('../middleware/image');
 const processText = require('../middleware/ocr')
 const authentication = require('../middleware/authentication');
 const { AuthorizationOwner } = require('../middleware/authorization');
