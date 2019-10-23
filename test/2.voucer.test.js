@@ -89,7 +89,7 @@ describe('Voucer', function () {
                 })
         })
     })
-
+    let voucher = null
     this.timeout(500000);
     describe("POST /voucers", function () {
         it("Succesfully create voucer", function (done) {
@@ -103,6 +103,7 @@ describe('Voucer', function () {
                 .field("point", 250)
                 .attach('image', fs.readFileSync('./img.jpg'), 'img.jpg')
                 .end(function (err, res) {
+                    voucher = res.body
                     expect(err).to.be.null;
                     expect(res).to.have.status(201);
                     expect(res.body).to.be.an("object")
@@ -128,13 +129,27 @@ describe('Voucer', function () {
                     done()
                 })
         })
+        it('Should return user data with the added voucher', (done) => {
+            chai
+                .request(app)
+                .post(`/users/voucers/${voucher._id}`)
+                .set('token', userToken)
+                .end(function (err, res) {
+                    expect(err).to.be.null
+                    expect(res.body).to.have.keys('message')
+                    expect(res.body.message).to.be.equal('Point is not enough')
+                    // expect(res.body).to.have.keys('status', 'user', 'message')
+                    // expect(res.body.user).to.have.keys('point', 'voucers', '_id', 'name', 'email', 'password', 'gender', 'createdAt', 'updatedAt', '__v')
+                    done()
+                })
+        })
     })
-    
+
     describe("PATCH /voucers", function () {
         it("Succesfully update voucer", function (done) {
             chai
                 .request(app)
-                .patch("/voucers/"+idVoucer)
+                .patch("/voucers/" + idVoucer)
                 .set("token", userToken)
                 .field("title", "Diskon 30% di indomaret MAX Rp.40.000 2")
                 .field("expire_date", "2019-10-11")
@@ -156,7 +171,7 @@ describe('Voucer', function () {
         it("Should error update voucer without sending token to server (status: 401)", function (done) {
             chai
                 .request(app)
-                .patch("/voucers/"+idVoucer)
+                .patch("/voucers/" + idVoucer)
                 .end(function (err, res) {
                     expect(err).to.be.null;
                     expect(res).to.have.status(401)
@@ -166,7 +181,7 @@ describe('Voucer', function () {
                 })
         })
     })
-    
+
     describe("DELETE /voucers/:id", function () {
         it("Should error delete voucer without sending token to server (status: 401)", function (done) {
             chai
@@ -196,3 +211,5 @@ describe('Voucer', function () {
         })
     })
 })
+
+

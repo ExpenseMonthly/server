@@ -5,19 +5,26 @@ const transactionSchema = new Schema({
     receipt_id: {
         type: String,
         validate: [{
+            /* istanbul ignore next */
             validator: function recieptUnique(receipt_id) {
                 return Transaction.findOne({ receipt_id: this.receipt_id })
+                    /* istanbul ignore next */
                     .then(function (transaction) {
+                        /* istanbul ignore next */
                         if (transaction) {
+                            /* istanbul ignore next */
                             return false;
                         } else {
+                            /* istanbul ignore next */
                             return true;
                         }
                     })
+                    /* istanbul ignore next */
                     .catch(function (err) {
                         return false;
                     })
             },
+            /* istanbul ignore next */
             message: props => `Can't add same receipt, this receipt already been input before.`
         }]
     },

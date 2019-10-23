@@ -1,7 +1,7 @@
 const deleteFile = require('../helpers/deleteFileGcs');
 
 function errorHandler(err, req, res, next) {
-    console.log(err, `<<<<<<<<<<<,,,,,,,,,,,,,,,,`);
+    // console.log(err, `<<<<<<<<<<<,,,,,,,,,,,,,,,,`);
     // console.log(err.stack, `<<<<<<<<<<<,,,,,,,,,,,,,,,,`);
     if (req.file && req.file.cloudStoragePublicUrl) {
         let file = req.file.cloudStoragePublicUrl.split('/');
@@ -21,7 +21,7 @@ function errorHandler(err, req, res, next) {
         for (r in err.errors) {
             msgValidation.push(err.errors[r].message);
         }
-        console.log(msgValidation);
+        // console.log(msgValidation);
         res.status(400).json({
             message: msgValidation
         });

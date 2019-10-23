@@ -190,7 +190,7 @@ describe('Authentication', function () {
                 })
         })
     })
-    
+
     describe('PATCH /users/point', function () {
         it("Succesfully patch user point", function (done) {
             chai
@@ -204,7 +204,7 @@ describe('Authentication', function () {
                     expect(err).to.be.null;
                     expect(res).to.have.status(200);
                     expect(res.body.user).to.be.an("object")
-                    expect(res.body.user).to.have.keys(["__v","_id", "gender", "email", "point", "name", "password", "voucers", "createdAt", "updatedAt"]);
+                    expect(res.body.user).to.have.keys(["__v", "_id", "gender", "email", "point", "name", "password", "voucers", "createdAt", "updatedAt"]);
                     done();
                 })
         })
@@ -225,5 +225,3 @@ describe('Authentication', function () {
         })
     })
 });
-
-
