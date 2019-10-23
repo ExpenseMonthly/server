@@ -5,7 +5,6 @@ const { UserVoucherAuthorization } = require('../middleware/authorization')
 const { multer, getPublicUrl, sendUploadToGCS } = require('../middleware/image');
 
 const router = express.Router();
-
 router.post('/register', multer.single('profile_url'), sendUploadToGCS, UserController.register);
 router.post('/login', UserController.login);
 router.get('/', Authentication, UserController.getUser);
