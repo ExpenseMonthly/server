@@ -27,7 +27,20 @@ describe('Transactions', function () {
                 done();
             })
     });
-
+    it('Should return error message when create', (done) => {
+        chai.request(app)
+            .post('/transactions/receipt')
+            .set('token', loggedUser.token)
+            .send({
+                "date": "",
+                "items": []
+            })
+            .end(function (err, res) {
+                expect(res.body).to.have.key('message')
+                expect(res.body.message).to.be.an('Array')
+                done()
+            })
+    })
     it('Should return created transaction', (done) => {
         chai.request(app)
             .post('/transactions/receipt')
