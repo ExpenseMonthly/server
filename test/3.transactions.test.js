@@ -2,6 +2,7 @@ const chai = require('chai');
 const chaiHttp = require('chai-http');
 const app = require('../app');
 const fs = require('fs');
+const photo = require('../helpers/photo');
 
 chai.use(chaiHttp);
 let expect = chai.expect;
@@ -125,6 +126,24 @@ describe('Transactions', function () {
                 expect(res.body.receipt).to.have.keys('items', '_id', 'date', 'userid', 'createdAt', 'updatedAt')
                 done()
             })
+    })
+    
+    this.timeout(500000);
+    describe("POST /transactions", function () {
+        it("Succesfully scan transactions", function (done) {
+            chai
+                .request(app)
+                .post("/transactions")
+                .set("token", loggedUser.token)
+                .send(photo)
+                .end(function (err, res) {
+                    expect(err).to.be.null;
+                    expect(res).to.have.status(200);
+                    expect(res.body).to.be.an("object")
+                    expect(res.body).to.have.keys(["receipt_id", "date", "items", "image_url"]);
+                    done();
+                })
+        })
     })
 })
 

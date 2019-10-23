@@ -90,6 +90,7 @@ describe('Voucer', function () {
         })
     })
 
+    this.timeout(500000);
     describe("POST /voucers", function () {
         it("Succesfully create voucer", function (done) {
             chai
