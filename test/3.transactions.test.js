@@ -15,9 +15,7 @@ let expect = chai.expect;
 //     point: 0
 // }
 let loggedUser = null
-let transaction = {
-
-}
+let transaction = null
 describe('Transactions', function () {
     before(function (done) {
         chai.request(app)
@@ -28,27 +26,110 @@ describe('Transactions', function () {
                 done();
             })
     });
-    it('Should return all transction without error', (done) => {
+
+    it('Should return created transaction', (done) => {
+        chai.request(app)
+            .post('/transactions/receipt')
+            .set('token', loggedUser.token)
+            .send({
+                "date": "2019-10-21",
+                "items": [
+                    {
+                        "name": "INDOMI GORENG SPC 80",
+                        "qty": 1,
+                        "price": 2500
+                    },
+                    {
+                        "name": "INDOMIE CHITATO 100G",
+                        "qty": 5,
+                        "price": 3200
+                    },
+                    {
+                        "name": "SAMPERNA MILD 16'S",
+                        "qty": 2,
+                        "price": 23900
+                    },
+                    {
+                        "name": "STT FRENCH FRIES 28G",
+                        "qty": 3,
+                        "price": 2800
+                    }
+                ]
+            })
+            .end(function (err, res) {
+                transaction = res.body
+                expect(res.body).to.have.an('Object')
+                expect(res.body).to.have.keys('total', 'items', '_id', 'date', 'userid', 'createdAt', 'updatedAt')
+                expect(res.body.items).to.have.length(4)
+                done()
+            })
+    })
+
+
+    it('Should return all transaction', (done) => {
         chai.request(app)
             .get('/transactions')
             .set('token', loggedUser.token)
             .end(function (err, res) {
-                console.log(res.body, "<<<<< TRNASCATION")
+                expect(res.body).to.be.an('Array')
+                expect(res.body[0]).to.be.an('Object')
+                expect(res.body[0]).to.have.keys('items', '_id', 'date', 'userid', 'createdAt', 'updatedAt')
                 done()
             })
     })
-    it('Should return created transaction', () => {
+
+    it('Should return all transaction with range', (done) => {
         chai.request(app)
-            .post('/transactions')
+            .get('/transactions/findRange/2019-10-01/2019-10-30')
+            .set('token', loggedUser.token)
+            .end(function (err, res) {
+                expect(res.body).to.be.an('Array')
+                expect(res.body[0]).to.be.an('Object')
+                expect(res.body[0]).to.have.keys('items', 'total', '_id', 'date', 'userid', 'createdAt', 'updatedAt')
+                done()
+            })
+    })
+
+    it('Should return one transaction by ID', (done) => {
+        chai.request(app)
+            .get(`/transactions/${transaction._id}`)
+            .set('token', loggedUser.token)
+            .end(function (err, res) {
+                expect(res.body).to.be.an('Object')
+                expect(res.body).to.have.keys('items', '_id', 'date', 'userid', 'createdAt', 'updatedAt')
+                expect(res.body.items).to.be.an('Array')
+                done()
+            })
+    })
+    it('Should be able to be updated by ID ', (done) => {
+        chai.request(app)
+            .patch(`/transactions/${transaction._id}`)
             .set('token', loggedUser.token)
             .send({
-
+                receipt_id: 'ganti',
             })
             .end(function (err, res) {
-                console.log()
+                expect(res.body).to.be.an('Object')
+                expect(res.body).to.have.keys('message', 'receipt')
+                expect(res.body.receipt).to.have.keys('items', '_id', 'date', 'userid', 'createdAt', 'updatedAt', 'receipt_id')
+                expect(res.body.receipt.receipt_id).to.be.equal('ganti')
+                done()
+            })
+    })
+    it('Should be able to delete by ID ', (done) => {
+        chai.request(app)
+            .delete(`/transactions/${transaction._id}`)
+            .set('token', loggedUser.token)
+            .end(function (err, res) {
+                expect(res.body).to.have.keys('message', 'receipt')
+                expect(res.body.message).to.be.equal('successfully deleted')
+                expect(res.body.receipt).to.have.keys('items', '_id', 'date', 'userid', 'createdAt', 'updatedAt', 'receipt_id')
+                done()
             })
     })
 })
+
+// router.delete('/:id', AuthorizationOwner, TransactionController.delete);
 
 // describe('Transactions', function () {
 //     this.timeout(500000);
