@@ -106,13 +106,12 @@ describe('Transactions', function () {
             .patch(`/transactions/${transaction._id}`)
             .set('token', loggedUser.token)
             .send({
-                receipt_id: 'ganti',
+                date: '2019-10-12',
             })
             .end(function (err, res) {
                 expect(res.body).to.be.an('Object')
                 expect(res.body).to.have.keys('message', 'receipt')
-                expect(res.body.receipt).to.have.keys('items', '_id', 'date', 'userid', 'createdAt', 'updatedAt', 'receipt_id')
-                expect(res.body.receipt.receipt_id).to.be.equal('ganti')
+                expect(res.body.receipt).to.have.keys('items', '_id', 'date', 'userid', 'createdAt', 'updatedAt')
                 done()
             })
     })
@@ -123,7 +122,7 @@ describe('Transactions', function () {
             .end(function (err, res) {
                 expect(res.body).to.have.keys('message', 'receipt')
                 expect(res.body.message).to.be.equal('successfully deleted')
-                expect(res.body.receipt).to.have.keys('items', '_id', 'date', 'userid', 'createdAt', 'updatedAt', 'receipt_id')
+                expect(res.body.receipt).to.have.keys('items', '_id', 'date', 'userid', 'createdAt', 'updatedAt')
                 done()
             })
     })
