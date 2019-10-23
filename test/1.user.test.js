@@ -13,7 +13,7 @@ before(function (done) {
     console.log("before in user test")
     clearDatabase(done);
 });
-  
+
 describe('Authentication', function () {
     describe('register', function () {
         it('Register without error', function (done) {
@@ -94,7 +94,7 @@ describe('Authentication', function () {
                     done();
                 })
         });
-        
+
         it('Error email or password not found', function (done) {
             chai.request(app)
                 .post('/users/login')
@@ -142,11 +142,11 @@ describe('Authentication', function () {
                     expect(err).to.be.null;
                     expect(res).to.have.status(200);
                     expect(res.body).to.be.an("object")
-                    expect(res.body).to.have.keys(["_id", "gender", "email", "point", "name"]);
+                    expect(res.body).to.have.keys(["_id", "gender", "email", "point", "name", "voucers"]);
                     done();
                 })
         })
-        
+
         it("error token not found", function (done) {
             chai
                 .request(app)
@@ -159,7 +159,7 @@ describe('Authentication', function () {
                 })
         })
     })
-    
+
     describe('GET /users/info', function () {
         it("Succesfully get user", function (done) {
             chai
@@ -170,7 +170,7 @@ describe('Authentication', function () {
                     expect(err).to.be.null;
                     expect(res).to.have.status(200);
                     expect(res.body).to.be.an("object")
-                    expect(res.body).to.have.keys(["__v","_id", "gender", "email", "point", "name", "password", "voucers", "createdAt", "updatedAt"]);
+                    expect(res.body).to.have.keys(["__v", "_id", "gender", "email", "point", "name", "password", "voucers", "createdAt", "updatedAt"]);
                     done();
                 })
         })
