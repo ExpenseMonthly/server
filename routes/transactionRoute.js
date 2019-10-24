@@ -10,7 +10,9 @@ router.use(authentication);
 router.get('/', TransactionController.findAll);
 
 router.post('/', (req, res, next) => {
+    /* istanbul ignore next */
     if (!req.body.photo) return next()
+    /* istanbul ignore next */
 
     let imageName = req.body.photo.uri.split('/')[req.body.photo.uri.split('/').length - 1];
         

@@ -2,6 +2,7 @@ const chai = require('chai');
 const chaiHttp = require('chai-http');
 const app = require('../app');
 const clearDatabase = require("../helpers/test/clearDatabase");
+const seedUser = require("../helpers/test/seedUser");
 
 chai.use(chaiHttp);
 let expect = chai.expect;
@@ -13,6 +14,10 @@ before(function (done) {
     console.log("before in user test")
     clearDatabase(done);
 });
+
+before(function (done) {
+    seedUser(done)
+})
 
 describe('Authentication', function () {
     describe('register', function () {
@@ -155,7 +160,6 @@ describe('Authentication', function () {
                 .request(app)
                 .get("/users")
                 .end(function (err, res) {
-                    console.log(res.body.message);
                     expect(res.body).to.have.property('message');
                     expect(res.body.message).to.have.members(['You are not authenticated user']);
                     done();
@@ -183,7 +187,6 @@ describe('Authentication', function () {
                 .request(app)
                 .get("/users/info")
                 .end(function (err, res) {
-                    console.log(res.body.message);
                     expect(res.body).to.have.property('message');
                     expect(res.body.message).to.have.members(['You are not authenticated user']);
                     done();
@@ -217,7 +220,6 @@ describe('Authentication', function () {
                     point: 20
                 })
                 .end(function (err, res) {
-                    console.log(res.body.message);
                     expect(res.body).to.have.property('message');
                     expect(res.body.message).to.have.members(['You are not authenticated user']);
                     done();

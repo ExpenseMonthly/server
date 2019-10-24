@@ -9,10 +9,14 @@ function authentication(req, res, next) {
         let _id = req.decode._id
         User.findById(_id)
             .then(user => {
+                /* istanbul ignore next */
                 if (user) {
+                /* istanbul ignore next */
                     next()
                 } else {
+                    /* istanbul ignore next */
                     next({ statusCode: 401, msg: "You are not authenticated user" })
+                    /* istanbul ignore next */
                 }
             })
             .catch(next)

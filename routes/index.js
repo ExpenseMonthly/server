@@ -15,7 +15,9 @@ router.use("/transactions", TransactionRoute);
 router.use("/voucers", VoucerRoute);
 
 router.get('/*', (req, res, next) => {
+    /* istanbul ignore next */
     next({ statusCode: 404, msg: 'Route not found' });
+    /* istanbul ignore next */
 });
 
 module.exports = router

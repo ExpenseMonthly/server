@@ -7,7 +7,9 @@ const client = new Vision.ImageAnnotatorClient();
 const GOOGLE_BUCKET = process.env.GCLOUD_BUCKET
 
 function processText(req, res, next) {
+    /* istanbul ignore next */
     if (typeof req.file ===  'undefined') return next()
+    /* istanbul ignore next */
     let data1 = [];
     let data2 = [];
     const filename = req.file.cloudStorageObject;
@@ -42,13 +44,17 @@ function processText(req, res, next) {
             const items = []
             priceQty.forEach((item, index) => {
                 let a = item.split(' ')
+                /* istanbul ignore next */
                 if (itemName[index]) {
+                /* istanbul ignore next */
                     items.push({ name: itemName[index], qty: a[0], price: a[1] })
                 }
             })
             let mydate = date[0]
             let newDate = null
+            /* istanbul ignore next */
             if ( typeof mydate !== 'undefined' || mydate ) {
+            /* istanbul ignore next */
                 
                 let dateConvert = mydate.split('-')[0]
                 let time = mydate.split('-')[1]

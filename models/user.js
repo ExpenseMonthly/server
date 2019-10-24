@@ -30,7 +30,9 @@ const userSchema = new Schema({
                             }
                         })
                         .catch(err => {
+                            /* istanbul ignore next */
                             return err.message
+                            /* istanbul ignore next */
                         })
                 },
                 message: 'Email has been used'
